@@ -12,11 +12,15 @@ import {UserShowMyVotes} from "./UserShowMyVotes";
 
 const { Content, Footer } = Layout;
 
-export class UserMain extends React.Component<RouteComponentProps>{
+export class UserMain extends React.Component<RouteComponentProps,{userName:string}>{
+    constructor(prop:RouteComponentProps){
+        super(prop);
+        this.state={userName:this.props.location.state.values.userName}
+    }
     public render() {
         return (
         <Layout className="layout">
-            <UserTitle id={2} nickName={this.props.location.state.values.userName}/>
+            <UserTitle id={2} nickName={this.state.userName}/>
                 <Content style={{ padding: '0 50px'}}>
                     <div style={{ background: '#fff', padding: 24,minHeight:550 }}>
                         {/*<Prompt message="你确定要离开当前页面吗？" />*/}
