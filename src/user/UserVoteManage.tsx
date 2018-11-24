@@ -1,9 +1,11 @@
 import * as React from "react";
-import {Table, Divider,Row,Col} from "antd";
 import {NavLink} from "react-router-dom";
+import {Button, Col, Divider, Popconfirm, Row, Table} from "antd";
 import Search from "antd/lib/input/Search";
 
-
+function onDelete(id:number){
+        alert(id);
+}
 const columns = [{
     title: '投票名称',
     dataIndex: 'title',
@@ -12,20 +14,17 @@ const columns = [{
     title: '操作',
     key: 'action',
     render: (record:any) => (
-     <span>
+        <span>
         <NavLink to={{
-          pathname:'/user/voting',
-          state:{
-              voteId:record.id
-          }
-      }}>投票</NavLink>
-        <Divider type="vertical" />
-        <NavLink to={{
-            pathname:'/user/showDetailInfo',
+            pathname:'/user/modifyVote',
             state:{
                 voteId:record.id
             }
-        }}>查看结果</NavLink>
+        }}>修改</NavLink>
+        <Divider type="vertical" />
+        <Popconfirm title="您确定要删除吗?" onConfirm={() => onDelete(record.id)}>
+            <a>删除</a>
+        </Popconfirm>
     </span>
     ),
 }];
@@ -41,16 +40,20 @@ const data = [{
     title:'今天老子能不能吃鸡'
 }];
 
-export class UserShowAllVotes extends React.Component{
-    public render() {
-        return (
+export class UserVoteManage extends React.Component{
+
+    public render(){
+        return(
             <div className={"padding-top"}>
                 <Row >
-                    <Col offset={6} span={12}><Search
+                    <Col offset={6} span={9}><Search
                         placeholder="请输入您要搜索的投票名称"
                         onSearch={value => console.log(value)}
                         enterButton
                     /></Col>
+                    <Col span={3}>
+                        &emsp;<Button type="primary"><NavLink to={"/user/publishVote"}>发布投票</NavLink></Button>
+                    </Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
                     <Col offset={6} span={12}><Table  dataSource={data}  columns={columns} rowKey={"id"}/></Col>

@@ -5,3 +5,18 @@
     color: white;
     float: left;
 }
+.padding-top{
+    padding-top: 2em;
+    /*max-width: 60em;*/
+    /*margin: 0 auto;*/
+}
+.showContent{
+    padding-top: 1em;
+}
+.showFooter{
+    padding-top: 2em;
+}
+.logout{
+    font-size: 1.3em;
+    color: white;
+}
