@@ -2,7 +2,7 @@ import * as React from "react";
 
 // 首先我们需要导入一些组件...
 import {NavLink} from 'react-router-dom'
-import {Menu, Layout, Col, Row} from 'antd'
+import {Menu, Layout} from 'antd'
 const {Header} = Layout;
 
 

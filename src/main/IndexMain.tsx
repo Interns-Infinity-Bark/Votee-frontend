@@ -1,4 +1,4 @@
-/// <reference path="./indexInterfaces.d.ts"/>
+
 import * as React from "react";
 
 import {IndexTitle} from './IndexTitle'
@@ -16,7 +16,7 @@ export class IndexMain extends React.Component{
         <Layout className="layout">
             <IndexTitle/>
                 <Content style={{ padding: '0 50px'}}>
-                    <div style={{ background: '#fff', padding: 24,minHeight:550 }}>
+                    <div style={{ background: '#faffff', padding: 24,minHeight:550 }}>
                         {/*<Prompt message="你确定要离开当前页面吗？" />*/}
                         <Switch>
                         <Route  exact path = "/index" component={ShowAllVoteInfo}/>
@@ -26,7 +26,7 @@ export class IndexMain extends React.Component{
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center'}}>
-                    Votee ©2018 Created by UMR
+                    Votee ©2018 Created by barks
                 </Footer>
         </Layout>
         )

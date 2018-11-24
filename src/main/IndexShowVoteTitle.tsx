@@ -1,4 +1,4 @@
-/// <reference path="./indexInterfaces.d.ts"/>
+
 import * as React from "react";
 import {List} from "antd";
 // 测试用数据，真实情况CheckUrl直接请求数据

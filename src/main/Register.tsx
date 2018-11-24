@@ -1,12 +1,10 @@
 import * as React from "react";
 
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon,  Button } from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {NavLink} from "react-router-dom";
 
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
 
 class RegisterForm extends React.Component<FormComponentProps,IRegisterState>{
     constructor(props:FormComponentProps){
