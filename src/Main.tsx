@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect,RouteComponentProps } f
 import {IndexMain} from "./main/IndexMain";
 import {AdminLogin} from "./admin/AdminLogin";
 import {UserMain} from "./user/UserMain";
+import {AdminMain} from "./admin/AdminMain";
 
 export class Main extends React.Component{
     public render() {
@@ -14,7 +15,7 @@ export class Main extends React.Component{
                     <Route path="/index" component={IndexMain} />
                     <Route path="/admin/login" component={AdminLogin}/>
                     <Route  path="/user" component={UserMain} />
-                    {/*<Route  path="/admin" component={AdminMain} />*/}
+                    <Route  path="/admin" component={AdminMain} />
                     {/*<Route  path="/superAdmin" component={SuperAdminMain} />*/}
                 </Switch>
             </Router>
