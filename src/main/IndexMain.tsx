@@ -13,22 +13,22 @@ const { Content, Footer } = Layout;
 export class IndexMain extends React.Component{
     public render() {
         return (
-        <Layout className="layout">
-            <IndexTitle/>
+            <Layout className="layout">
+                <IndexTitle/>
                 <Content style={{ padding: '0 50px'}}>
                     <div style={{ background: '#faffff', padding: 24,minHeight:550 }}>
-                        {/*<Prompt message="你确定要离开当前页面吗？" />*/}
+                        {/*<Prompt message="你确定要离开当前页面吗？" */}
                         <Switch>
-                        <Route  exact path = "/index" component={ShowAllVoteInfo}/>
-                        <Route  path = "/index/login" component = {Login}/>
-                        <Route  path = "/index/register" component = {Register}/>
+                            <Route  exact path = "/index" component={ShowAllVoteInfo}/>
+                            <Route  path = "/index/login" component = {Login}/>
+                            <Route  path = "/index/register" component = {Register}/>
                         </Switch>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center'}}>
                     Votee ©2018 Created by barks
                 </Footer>
-        </Layout>
+            </Layout>
         )
     }
 }

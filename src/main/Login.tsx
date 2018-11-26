@@ -14,13 +14,34 @@ class LoginForm extends React.Component<ILoginFormProps>{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // 表单提交的数据是values
-                console.log('Received values of form: ', values);
-                if(values.userName === "UMR" && values.password === "123"){
-                    alert('登录成功');
-                    this.props.history.push('/user',{values})
-                }
-                else { alert('用户名或密码错误！') }
+                //请求的url
+                const url="http://123.206.15.249:3000/login";
+                //请求的参数
+                const param={
+                    email:values.userName,
+                    password:values.password
+                };
+                //调用fetch
+                fetch(url,{
+                    //请求方式
+                    method:'POST',
+                    //将请求的参数转成json
+                    body:JSON.stringify(param) ,
+                    //请求头
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                    // 请求的返回值
+                }).then(function (response) {
+                    return response.json();
+                }).then(data => {
+                    if(data.status == "ok") {
+                        alert('登录成功');
+                        this.props.history.push('/user',{values});
+                    } else {
+                        alert('登录失败');
+                    }
+                })
             }
         });
     }

@@ -30,18 +30,35 @@ const columns = [{
     ),
 }];
 
-const data = [{
-    id:1,
-    title:'blue 帅不帅',
-},            {
-    id:2,
-    title:'你纳爷帅不帅',
-},            {
-    id:3,
-    title:'今天老子能不能吃鸡'
-}];
 
-export class UserShowAllVotes extends React.Component{
+
+export class UserShowAllVotes extends React.Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            data: [
+            ],
+        };
+    }
+
+    componentDidMount() {
+        const url="http://123.206.15.249:3000/login";
+        const param={
+        };
+        fetch(url,{
+            method:'POST',
+            body:JSON.stringify(param) ,
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(data => {
+            this.setState({
+                data,
+            });
+        })
+    }
     public render() {
         return (
             <div className={"padding-top"}>
@@ -53,7 +70,7 @@ export class UserShowAllVotes extends React.Component{
                     /></Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={data}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )
