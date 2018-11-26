@@ -1,44 +1,45 @@
 import * as React from "react";
 import {Table, Row, Col, Icon, Switch} from "antd";
-import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
 
 
 const columns = [{
-    title: '用户列表',
-    dataIndex: 'email',
-    key: 'email',
+    title: '所有投票',
+    dataIndex: 'title',
+    key: 'title',
 },               {
     title: '是否禁用',
-    dataIndex: 'isActive',
-    key: 'isActive',
+    dataIndex:'isActive',
+    key: 'forbid',
     render: (record:any) => (
-        <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
-                defaultChecked={record.isActive} />
+     <span>
+         <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
+                 defaultChecked={record.isActive} />
+    </span>
     ),
 }];
 
 const data = [{
     id:1,
-    email:'blue',
+    title:'blue 帅不帅',
     isActive:true
 },            {
     id:2,
-    email:'umr',
+    title:'你纳爷帅不帅',
     isActive:true
 },            {
     id:3,
-    email:'pbh',
+    title:'今天老子能不能吃鸡',
     isActive:true
 }];
 
-export class AdminShowUsers extends React.Component{
+export class AdminShowAllVotes extends React.Component{
     public render() {
         return (
             <div className={"padding-top"}>
                 <Row >
                     <Col offset={6} span={12}><Search
-                        placeholder="请输入您要搜索的用户名称"
+                        placeholder="请输入您要搜索的投票名称"
                         onSearch={value => console.log(value)}
                         enterButton
                     /></Col>
