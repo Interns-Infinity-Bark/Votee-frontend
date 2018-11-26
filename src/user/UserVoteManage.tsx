@@ -7,7 +7,7 @@ function onDelete(id:number){
         alert(id);
 }
 const columns = [{
-    title: '投票名称',
+    title: '我发布的投票',
     dataIndex: 'title',
     key: 'title',
 },               {
@@ -46,7 +46,7 @@ export class UserVoteManage extends React.Component{
         return(
             <div className={"padding-top"}>
                 <Row >
-                    <Col offset={6} span={9}><Search
+                    <Col offset={6} span={10}><Search
                         placeholder="请输入您要搜索的投票名称"
                         onSearch={value => console.log(value)}
                         enterButton

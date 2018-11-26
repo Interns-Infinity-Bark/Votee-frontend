@@ -7,7 +7,7 @@ import Search from "antd/lib/input/Search";
 
 
 const columns = [{
-    title: '投票名称',
+    title: '我投过的投票',
     dataIndex: 'title',
     key: 'title',
 },               {

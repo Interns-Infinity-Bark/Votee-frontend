@@ -1,53 +1,44 @@
 import * as React from "react";
-import {Table, Divider,Row,Col} from "antd";
+import {Table, Row, Col, Icon, Switch} from "antd";
 import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
 
 
 const columns = [{
-    title: '所有投票',
-    dataIndex: 'title',
-    key: 'title',
+    title: '用户列表',
+    dataIndex: 'email',
+    key: 'email',
 },               {
-    title: '操作',
-    key: 'action',
+    title: '是否禁用',
+    dataIndex: 'isActive',
+    key: 'isActive',
     render: (record:any) => (
-     <span>
-        <NavLink to={{
-          pathname:'/user/voting',
-          state:{
-              voteId:record.id
-          }
-      }}>投票</NavLink>
-        <Divider type="vertical" />
-        <NavLink to={{
-            pathname:'/user/showDetailInfo',
-            state:{
-                voteId:record.id
-            }
-        }}>查看结果</NavLink>
-    </span>
+        <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
+                defaultChecked={record.isActive} />
     ),
 }];
 
 const data = [{
     id:1,
-    title:'blue 帅不帅',
+    title:'blue',
+    isActive:true
 },            {
     id:2,
-    title:'你纳爷帅不帅',
+    title:'umr',
+    isActive:true
 },            {
     id:3,
-    title:'今天老子能不能吃鸡'
+    title:'pbh',
+    isActive:true
 }];
 
-export class UserShowAllVotes extends React.Component{
+export class AdminShowUsers extends React.Component{
     public render() {
         return (
             <div className={"padding-top"}>
                 <Row >
                     <Col offset={6} span={12}><Search
-                        placeholder="请输入您要搜索的投票名称"
+                        placeholder="请输入您要搜索的用户名称"
                         onSearch={value => console.log(value)}
                         enterButton
                     /></Col>
