@@ -5,7 +5,7 @@ import {FormComponentProps} from "antd/lib/form";
 import FormItem from "antd/lib/form/FormItem";
 import {NavLink} from "react-router-dom";
 
-import "./Index.css"
+import "../main/Index.css"
 
 class LoginForm extends React.Component<FormComponentProps>{
     public handleSubmit = (e:any) => {
