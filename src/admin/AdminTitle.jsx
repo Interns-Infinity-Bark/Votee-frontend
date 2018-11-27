@@ -1,14 +1,12 @@
-/// <reference path="./adminInterfaces.d.ts"/>
 import * as React from "react";
 
-// 首先我们需要导入一些组件...
 import {NavLink, Prompt} from 'react-router-dom'
 import {Menu, Layout, Col, Row} from 'antd'
 const {Header} = Layout;
 const flag = false;
 
-export class AdminTitle extends React.Component<IAdminTitleProps>{
-    public render() {
+export class AdminTitle extends React.Component{
+    render() {
         return (
             <Header>
                 <Row>
@@ -18,7 +16,7 @@ export class AdminTitle extends React.Component<IAdminTitleProps>{
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={[location.pathname]}
+                    defaultSelectedKeys={[window.location.pathname]}
                     style={{ lineHeight: '64px' }}
                 >
                     <Menu.Item key="/admin"><NavLink to="/admin">查看用户列表</NavLink></Menu.Item>

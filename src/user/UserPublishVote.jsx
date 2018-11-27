@@ -1,33 +1,24 @@
 import * as React from 'react'
 import {Button, Form, Icon, Input, Switch,DatePicker} from "antd";
-import {FormComponentProps} from "antd/lib/form";
 import {IconProps} from "antd/lib/icon";
-import moment from "moment"
 const FormItem = Form.Item;
-interface IUserPublishVoteProps extends FormComponentProps,IconProps{
-}
 
-class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVoteInfoState>{
-    constructor(props:IUserPublishVoteProps){
+class UserPublishVoteForm extends React.Component{
+    constructor(props){
         super(props);
         this.state={
-            title:"你纳爷能不能吃鸡",
-            content: {
-                optionIds: [0, 1, 2, 3],
-                texts: [
-                    "你纳爷怎么可能能吃鸡呢？",
-                    "你纳爷打死也不可能吃鸡的",
-                    "你纳爷吃不了鸡，但是我可以",
-                    "你纳爷如果变帅了就能吃鸡了hhhhh"
-                ]
-            },
+            title:"",
+            content:[],
             private:true,
-            password:"123",
+            password:"",
             anonymous:false,
             endAt:new Date()
         }
     }
-    remove = (k:any) => {
+    componentDidMount(){
+        this.add();
+    }
+    remove = (k) => {
         const { form } = this.props;
         // can use data-binding to get
         const keys = form.getFieldValue('optionIds');
@@ -38,7 +29,7 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
 
         // can use data-binding to set
         form.setFieldsValue({
-            optionIds: keys.filter((key:any) => {
+            optionIds: keys.filter((key) => {
                 return key !== k;
             }),
         });
@@ -54,9 +45,9 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
             optionIds: nextKeys,
         });
     };
-    handleSubmit = (e:any) => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err:any, fieldsValue:any) => {
+        this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return;
             }
@@ -64,10 +55,42 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                 ...fieldsValue,
                 'endAt': fieldsValue['endAt'].format('YYYY-MM-DD HH:mm:ss'),
             };
+
             console.log('Received values of form: ', values);
+            //请求的url
+            const url="http://123.206.15.249:3000/vote";
+            //请求的参数
+            /*
+            const param={
+                email:values.userName,
+                password:values.password
+            };
+            */
+            //调用fetch
+            fetch(url,{
+                credentials: 'include',
+                //请求方式
+                method:'GET',
+                //将请求的参数转成json
+                body:JSON.stringify(values) ,
+                //请求头
+                headers: {
+                    'content-type': 'application/json'
+                }
+                // 请求的返回值
+            }).then(function (response) {
+                return response.json();
+            }).then(data => {
+                if(data.status === "ok") {
+                    alert('发布成功');
+                } else {
+                    alert('发布失败');
+                }
+            })
+
         });
     };
-    public render(){
+    render(){
         const { getFieldDecorator,getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -91,9 +114,9 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                 },
             },
         };
-        getFieldDecorator('optionIds', { initialValue: this.state.content.optionIds });
+        getFieldDecorator('optionIds', { initialValue: [] });
         const keys = getFieldValue('optionIds');
-        const formItems = keys.map((k:number, index:number) => {
+        const formItems = keys.map((k, index) => {
             return (
                 <FormItem
                     {...formItemLayout}
@@ -108,7 +131,6 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                             whitespace: true,
                             message: "请输入这个选项名或者删除这个选项！",
                         }],
-                        initialValue:this.state.content.texts[k]
                     })(
                         <Input placeholder="请输入选项内容" style={{ width: '95%', marginRight: 8 }} />
                     )}
@@ -124,7 +146,6 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
         });
         const config = {
             rules: [{ type: 'object', required: true, message: '请选择时间！' }],
-            initialValue:moment(this.state.endAt,"YYYY-MM-DD HH:mm:ss")
         };
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -137,7 +158,6 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                             required: true, message: '请输入投票标题!',
                             whitespace: true
                         }],
-                        initialValue:this.state.title
                     })(
                         <Input placeholder={"请输入标题"} />
                     )}
@@ -152,12 +172,12 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                     {...formItemLayout}
                     label="是否私有："
                 >
-                    {getFieldDecorator('private', {valuePropName:'checked',initialValue:this.state.private})(
+                    {getFieldDecorator('private', {valuePropName:'checked',initialValue:true})(
                         <Switch
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
                             onChange={()=>{this.setState({private:!this.state.private})}}
-                        />
+                             />
                     )}
                 </FormItem>
                 <FormItem
@@ -165,7 +185,7 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                     label="密码："
                 >
                     {getFieldDecorator('password', {
-                        initialValue:this.state.password
+                        initialValue:""
                     })(<Input
                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                         disabled={!this.state.private}
@@ -176,7 +196,7 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
                     {...formItemLayout}
                     label="是否匿名："
                 >
-                    {getFieldDecorator('anonymous', {valuePropName:'checked',initialValue:this.state.anonymous})(
+                    {getFieldDecorator('anonymous', {valuePropName:'checked',initialValue:true})(
                         <Switch
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
@@ -198,4 +218,4 @@ class UserModifyVoteForm extends React.Component<IUserPublishVoteProps,IUserVote
         )
     }
 }
-export const UserModifyVote = Form.create()(UserModifyVoteForm);
+export const UserPublishVote = Form.create()(UserPublishVoteForm);

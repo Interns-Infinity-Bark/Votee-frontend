@@ -7,14 +7,14 @@ const {Header} = Layout;
 
 
 export class IndexTitle extends React.Component{
-    public render() {
+    render() {
         return (
             <Header>
                 <div className="logo" />
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={[location.pathname]}
+                    defaultSelectedKeys={[window.location.pathname]}
                     style={{ lineHeight: '64px' }}
                 >
                         <Menu.Item key="/index"><NavLink to="/index">欢迎来到votee</NavLink></Menu.Item>

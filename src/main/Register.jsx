@@ -1,32 +1,57 @@
 import * as React from "react";
 
 import { Form, Input, Tooltip, Icon,  Button } from 'antd';
-import {FormComponentProps} from "antd/lib/form";
 import {NavLink} from "react-router-dom";
 
 const FormItem = Form.Item;
 
-class RegisterForm extends React.Component<FormComponentProps,IRegisterState>{
-    constructor(props:FormComponentProps){
+class RegisterForm extends React.Component{
+    constructor(props){
         super(props);
         this.state = {
             confirmDirty: false,
             autoCompleteResult: [],
         };
     }
-    public handleSubmit = (e:any) => {
+    handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                const url="http://123.206.15.249:3000/register";
+                const param={
+                    email:values.email,
+                    password:values.password,
+                    confirmPassword:values.confirm,
+                    nickname:values.nickname
+                };
+                fetch(url,{
+                    credentials: 'include',
+                    method:'POST',
+                    body:JSON.stringify(param) ,
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(function (response) {
+                    return response.json();
+                }).then(data => {
+                    if(data.status === "ok") {
+                        alert('注册成功');
+                        this.props.history.push('/user');
+                        window.__user = data.data.user;
+                    } else {
+                        alert('注册失败');
+                    }
+                })
+
                 console.log('Received values of form: ', values);
             }
         });
     };
-    public handleConfirmBlur = (e:any) => {
+    handleConfirmBlur = (e) => {
         const value = e.target.value;
         this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     };
-    public compareToFirstPassword = (rule:any, value:any, callback:any) => {
+    compareToFirstPassword = (rule, value, callback) => {
         const form = this.props.form;
         if (value && value !== form.getFieldValue('password')) {
             callback('Two passwords that you enter is inconsistent!');
@@ -34,14 +59,14 @@ class RegisterForm extends React.Component<FormComponentProps,IRegisterState>{
             callback();
         }
     };
-    public validateToNextPassword = (rule:any, value:any, callback:any) => {
+    validateToNextPassword = (rule, value, callback) => {
         const form = this.props.form;
         if (value && this.state.confirmDirty) {
             form.validateFields(['confirm'], { force: true });
         }
         callback();
     };
-    public render() {
+    render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -68,38 +93,27 @@ class RegisterForm extends React.Component<FormComponentProps,IRegisterState>{
         return (
             <div style={{marginTop:"2em"}}>
                 <Form onSubmit={this.handleSubmit}>
-                    <FormItem
-                        {...formItemLayout}
-                        label="邮箱&用户名"
-                    >
+                    <FormItem {...formItemLayout} label="邮箱&用户名">
                         {getFieldDecorator('email', {
                             rules: [{
                                 type: 'email', message: 'The input is not valid E-mail!',
                             },      {
                                 required: true, message: 'Please input your E-mail!',
                             }],
-                        })(
-                            <Input />
-                        )}
+                        })
+                        (<Input />)}
                     </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="密码"
-                    >
+                    <FormItem {...formItemLayout} label="密码" >
                         {getFieldDecorator('password', {
                             rules: [{
                                 required: true, message: 'Please input your password!',
                             },      {
                                 validator: this.validateToNextPassword,
                             }],
-                        })(
-                            <Input type="password" />
-                        )}
+                        })
+                        (<Input type="password" />)}
                     </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="确认密码"
-                    >
+                    <FormItem {...formItemLayout} label="确认密码" >
                         {getFieldDecorator('confirm', {
                             rules: [{
                                 required: true, message: 'Please confirm your password!',
@@ -110,22 +124,14 @@ class RegisterForm extends React.Component<FormComponentProps,IRegisterState>{
                             <Input type="password" onBlur={this.handleConfirmBlur} />
                         )}
                     </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label={(
-                            <span>
-              昵称&nbsp;
-                                <Tooltip title="您想让人怎么称呼您?">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-                        )}
-                    >
+                    <FormItem {...formItemLayout} label={(
+                        <span>昵称&nbsp;
+                            <Tooltip title="您想让人怎么称呼您?"><Icon type="question-circle-o" /></Tooltip>
+                        </span>)}>
                         {getFieldDecorator('nickname', {
                             rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                        })(
-                            <Input />
-                        )}
+                        })
+                        (<Input />)}
                     </FormItem>
                     <FormItem {...tailFormItemLayout}>
                         <Button type="primary" htmlType="submit">立即注册</Button>

@@ -11,7 +11,7 @@ const columns = [{
     title: '是否禁用',
     dataIndex:'isActive',
     key: 'forbid',
-    render: (record:any) => (
+    render: (record) => (
      <span>
          <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
                  defaultChecked={record.isActive} />
@@ -34,7 +34,7 @@ const data = [{
 }];
 
 export class AdminShowAllVotes extends React.Component{
-    public render() {
+    render() {
         return (
             <div className={"padding-top"}>
                 <Row >

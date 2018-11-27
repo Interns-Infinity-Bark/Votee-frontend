@@ -10,7 +10,7 @@ import {AdminShowAllVotes} from "./AdminShowAllVotes";
 const { Content, Footer } = Layout;
 
 export class AdminMain extends React.Component{
-    public render() {
+    render() {
         return (
         <Layout className="layout">
             <AdminTitle id={1} nickName={"Ninaye"}/>

@@ -4,24 +4,39 @@ import { Form, Icon, Input, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import FormItem from "antd/lib/form/FormItem";
 import {NavLink, RouteComponentProps} from "react-router-dom";
-interface IAdminLoginFormProps extends FormComponentProps,RouteComponentProps{
-}
 
 import "../main/Index.css"
 
-class AdminLoginForm extends React.Component<IAdminLoginFormProps>{
-    public handleSubmit = (e:any) => {
+class AdminLoginForm extends React.Component{
+    handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // 表单提交的数据是values
-                console.log('Received values of form: ', values);
-                this.props.history.push('/admin',{values})
-
+                const url="http://123.206.15.249:3000/admin/login";
+                const param={
+                    username:values.userName,
+                    password:values.password
+                };
+                fetch(url,{
+                    method:'POST',
+                    body:JSON.stringify(param) ,
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(function (response) {
+                    return response.json();
+                }).then(data => {
+                    if(data.status === "ok") {
+                        alert('登录成功');
+                        this.props.history.push('/admin',{values})
+                    } else {
+                        alert('登录失败');
+                    }
+                })
             }
         });
     }
-    public render() {
+    render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="container">

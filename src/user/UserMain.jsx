@@ -1,8 +1,7 @@
-/// <reference path="./userInterfaces.d.ts"/>
 import * as React from "react";
 
-import {UserTitle} from './UserTitle'
-import { Route, Switch,RouteComponentProps} from 'react-router-dom'
+import UserTitle from './UserTitle'
+import { Route, Switch} from 'react-router-dom'
 
 import { Layout} from 'antd';
 import {UserShowAllVotes} from "./UserShowAllVotes";
@@ -16,15 +15,15 @@ import {UserPublishVote} from "./UserPublishVote";
 
 const { Content, Footer } = Layout;
 
-export class UserMain extends React.Component<RouteComponentProps,IUserMainState>{
-    constructor(props:RouteComponentProps){
+export class UserMain extends React.Component{
+    constructor(props){
         super(props);
         // this.state={id:1,nickName:this.props.location.state.values.userName}
     }
-    public render() {
+    render() {
         return (
         <Layout className="layout">
-            <UserTitle id={2} nickName={"UMR"}/>
+            <UserTitle id={2} nickName={"UMR"} />
                 <Content style={{ padding: '0 50px'}}>
                     <div style={{ background: '#fff', padding: 24,minHeight:550 }}>
                         {/*<Prompt message="你确定要离开当前页面吗？" />*/}

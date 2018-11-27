@@ -1,16 +1,13 @@
 import * as React from "react";
 
 import { Form, Icon, Input, Button} from 'antd';
-import {FormComponentProps} from "antd/lib/form";
 import FormItem from "antd/lib/form/FormItem";
-import {NavLink,RouteComponentProps} from "react-router-dom";
-interface ILoginFormProps extends FormComponentProps,RouteComponentProps{
-}
+import {NavLink} from "react-router-dom";
 
 import "./Index.css"
 
-class LoginForm extends React.Component<ILoginFormProps>{
-    public handleSubmit = (e:any) => {
+class LoginForm extends React.Component{
+    handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -23,6 +20,7 @@ class LoginForm extends React.Component<ILoginFormProps>{
                 };
                 //调用fetch
                 fetch(url,{
+                    credentials: 'include',
                     //请求方式
                     method:'POST',
                     //将请求的参数转成json
@@ -35,9 +33,10 @@ class LoginForm extends React.Component<ILoginFormProps>{
                 }).then(function (response) {
                     return response.json();
                 }).then(data => {
-                    if(data.status == "ok") {
+                    if(data.status === "ok") {
                         alert('登录成功');
-                        this.props.history.push('/user',{values});
+                        this.props.history.push('/user');
+                        window.__user = data.data.user;
                     } else {
                         alert('登录失败');
                     }
@@ -45,7 +44,7 @@ class LoginForm extends React.Component<ILoginFormProps>{
             }
         });
     }
-    public render() {
+    render() {
         const { getFieldDecorator } = this.props.form;
         return (
                 <div className="container">

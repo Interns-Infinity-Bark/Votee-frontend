@@ -11,7 +11,7 @@ import { Layout} from 'antd';
 const { Content, Footer } = Layout;
 
 export class IndexMain extends React.Component{
-    public render() {
+    render() {
         return (
             <Layout className="layout">
                 <IndexTitle/>

@@ -4,7 +4,7 @@ import {Row,Col} from "antd";
 import './Index.css'
 
 export class ShowAllVoteInfo extends React.Component{
-    public render() {
+    render() {
         return (
             <div>
                 <Row>

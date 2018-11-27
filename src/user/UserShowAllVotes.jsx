@@ -11,7 +11,7 @@ const columns = [{
 },               {
     title: '操作',
     key: 'action',
-    render: (record:any) => (
+    render: (record) => (
      <span>
         <NavLink to={{
           pathname:'/user/voting',
@@ -32,8 +32,8 @@ const columns = [{
 
 
 
-export class UserShowAllVotes extends React.Component<any, any> {
-    constructor(props: any) {
+export class UserShowAllVotes extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             data: [
@@ -42,24 +42,23 @@ export class UserShowAllVotes extends React.Component<any, any> {
     }
 
     componentDidMount() {
-        const url="http://123.206.15.249:3000/login";
-        const param={
-        };
+        const url="http://123.206.15.249:3000/votes";
         fetch(url,{
-            method:'POST',
-            body:JSON.stringify(param) ,
+            credentials: 'include',
+            method:'GET',
             headers: {
                 'content-type': 'application/json'
             }
         }).then(function (response) {
             return response.json();
         }).then(data => {
+            console.log(data);
             this.setState({
                 data,
             });
         })
     }
-    public render() {
+    render() {
         return (
             <div className={"padding-top"}>
                 <Row >
@@ -70,7 +69,7 @@ export class UserShowAllVotes extends React.Component<any, any> {
                     /></Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data.votes}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )
