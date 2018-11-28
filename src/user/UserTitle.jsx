@@ -13,7 +13,7 @@ const flag = false;
 class UserTitle extends React.Component {
     logout = () => {
         get(`${api.base}/logout`);
-        this.props.history.push('index');
+        this.props.history.push('/index');
         window.__user = null;
     };
 

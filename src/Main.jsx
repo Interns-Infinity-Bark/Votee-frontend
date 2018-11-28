@@ -13,18 +13,29 @@ export class Main extends React.Component{
 
     // 骚代码，不要试图删除或理解
     user = window.__user;
+    admin = window.__admin;
     timer = null;
 
     async componentDidMount() {
         this.timer = setInterval(() => {
+            let hasChange = false;
             if (this.user !== window.__user) {
                 this.user = window.__user;
-                this.forceUpdate();
+                hasChange = true;
             }
+            if (this.admin !== window.__admin) {
+                this.admin = window.__admin;
+                hasChange = true;
+            }
+            hasChange && this.forceUpdate();
         }, 1000);
-        const data = await get(`${api.base}/`);
-        if (data.status === 'ok') {
-            window.__user = data.data.user;
+        const userData = await get(`${api.base}/`);
+        if (userData.status === 'ok') {
+            window.__user = userData.data.user;
+        }
+        const adminData = await get(`${api.admin}/`);
+        if (adminData.status === 'ok') {
+            window.__admin = adminData.data.user;
         }
     }
 

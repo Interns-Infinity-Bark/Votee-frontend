@@ -49,7 +49,7 @@ export class UserShowMyVotes extends React.Component{
     async componentDidMount() {
         const user = window.__user || {};
         const data = await get(`${api.base}/user/${user.id}/votes`);
-        data.data && data.data.votes && this.setState({
+        data.status === 'ok' && this.setState({
             data: data.data.votes,
         });
     }

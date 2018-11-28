@@ -38,15 +38,14 @@ export class UserShowAllVotes extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [
-            ],
+            data: [],
         };
     }
 
     async componentDidMount() {
         const data = await get(`${api.base}/votes`);
-        this.setState({
-            data: data.data,
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
         });
     }
 
@@ -61,7 +60,7 @@ export class UserShowAllVotes extends React.Component {
                     /></Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={this.state.data.votes}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )

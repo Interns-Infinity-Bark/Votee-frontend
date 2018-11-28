@@ -5,36 +5,29 @@ import FormItem from "antd/lib/form/FormItem";
 import {NavLink} from "react-router-dom";
 
 import "../main/Index.css"
+import { post } from '../utils/request';
+import { api } from '../configs';
 
 class AdminLoginForm extends React.Component{
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                const url="http://123.206.15.249:3000/admin/login";
-                const param={
-                    username:values.userName,
-                    password:values.password
-                };
-                fetch(url,{
-                    method:'POST',
-                    body:JSON.stringify(param) ,
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(function (response) {
-                    return response.json();
-                }).then(data => {
-                    if(data.status === "ok") {
-                        alert('登录成功');
-                        this.props.history.push('/admin',{values})
-                    } else {
-                        alert('登录失败');
-                    }
-                })
+                const data = await post(`${api.admin}/login`, {
+                    username: values.userName,
+                    password: values.password,
+                });
+                if(data.status === "ok") {
+                    alert('登录成功');
+                    this.props.history.push('/admin',{values});
+                    window.__admin = data.data.user;
+                } else {
+                    alert('登录失败');
+                }
             }
         });
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
