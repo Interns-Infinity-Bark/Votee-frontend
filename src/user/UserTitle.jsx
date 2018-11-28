@@ -17,23 +17,6 @@ class UserTitle extends React.Component {
         window.__user = null;
     };
 
-    // 骚代码，不要试图删除或理解
-    user = window.__user;
-    timer = null;
-
-    componentDidMount() {
-        this.timer = setInterval(() => {
-            if (this.user !== window.__user) {
-                this.user = window.__user;
-                this.forceUpdate();
-            }
-        }, 1000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    }
-
     render() {
         const user = window.__user || {};
         return (

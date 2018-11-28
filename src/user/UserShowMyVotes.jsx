@@ -4,6 +4,8 @@ import {UserShowVoteDetailInfo} from "./UserShowVoteDetailInfo";
 import {Table, Divider,Row,Col} from "antd";
 import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
+import { get } from '../utils/request';
+import { api } from '../configs';
 
 
 const columns = [{
@@ -37,6 +39,21 @@ const data = [{
 }];
 
 export class UserShowMyVotes extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        }
+    }
+
+    async componentDidMount() {
+        const user = window.__user || {};
+        const data = await get(`${api.base}/user/${user.id}/votes`);
+        data.data && data.data.votes && this.setState({
+            data: data.data.votes,
+        });
+    }
+
     render() {
         return (
             <div className={"padding-top"}>
@@ -48,7 +65,7 @@ export class UserShowMyVotes extends React.Component{
                     /></Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={data}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )
