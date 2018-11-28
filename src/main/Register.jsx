@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Form, Input, Tooltip, Icon,  Button } from 'antd';
 import {NavLink} from "react-router-dom";
+import { post } from '../utils/request';
+import { api } from '../configs/';
 
 const FormItem = Form.Item;
 
@@ -15,35 +17,21 @@ class RegisterForm extends React.Component{
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (!err) {
-                const url="http://123.206.15.249:3000/register";
-                const param={
-                    email:values.email,
-                    password:values.password,
-                    confirmPassword:values.confirm,
-                    nickname:values.nickname
-                };
-                fetch(url,{
-                    credentials: 'include',
-                    method:'POST',
-                    body:JSON.stringify(param) ,
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(function (response) {
-                    return response.json();
-                }).then(data => {
-                    if(data.status === "ok") {
-                        alert('注册成功');
-                        this.props.history.push('/user');
-                        window.__user = data.data.user;
-                    } else {
-                        alert('注册失败');
-                    }
-                })
-
-                console.log('Received values of form: ', values);
+                const data = await post(`${api.base}/register`, {
+                    email: values.email,
+                    password: values.password,
+                    confirmPassword: values.confirm,
+                    nickname: values.nickname,
+                });
+                if (data.status === 'ok') {
+                    alert('注册成功');
+                    this.props.history.push('/user');
+                    window.__user = data.data.user;
+                } else {
+                    alert('注册失败');
+                }
             }
         });
     };

@@ -1,4 +1,6 @@
 import './user.css';
+import {get} from '../utils/request';
+import {api} from '../configs/';
 import * as React from "react";
 
 // 首先我们需要导入一些组件...
@@ -10,16 +12,7 @@ const flag = false;
 
 class UserTitle extends React.Component {
     logout = () => {
-        const url="http://123.206.15.249:3000/logout";
-        fetch(url,{
-            credentials: 'include',
-            method:'GET',
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(function (response) {
-            return response.json();
-        });
+        get(`${api.base}/logout`);
         this.props.history.push('index');
         window.__user = null;
     };

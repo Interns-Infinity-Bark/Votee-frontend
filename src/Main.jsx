@@ -5,23 +5,15 @@ import {IndexMain} from "./main/IndexMain";
 import {AdminLogin} from "./admin/AdminLogin";
 import {UserMain} from "./user/UserMain";
 import {AdminMain} from "./admin/AdminMain";
+import {get} from './utils/request';
+import {api} from './configs/';
 
 export class Main extends React.Component{
-    componentDidMount() {
-        const url = "http://123.206.15.249:3000/";
-        fetch(url, {
-            credentials: 'include',
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(data => {
-            if (data.status === 'ok') {
-                window.__user = data.data.user;
-            }
-        });
+    async componentDidMount() {
+        const data = await get(`${api.base}/`);
+        if (data.status === 'ok') {
+            window.__user = data.data.user;
+        }
     }
 
     render() {

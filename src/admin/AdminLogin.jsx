@@ -1,9 +1,8 @@
 import * as React from "react";
 
 import { Form, Icon, Input, Button} from 'antd';
-import {FormComponentProps} from "antd/lib/form";
 import FormItem from "antd/lib/form/FormItem";
-import {NavLink, RouteComponentProps} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 import "../main/Index.css"
 

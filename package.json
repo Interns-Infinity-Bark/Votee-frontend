@@ -17,9 +17,7 @@
     "react-dom": "^16.6.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.1",
-    "tslint": "^5.11.0",
-    "typescript": "^3.1.6"
+    "react-scripts": "^2.1.1"
   },
   "scripts": {
     "start": "react-app-rewired start",

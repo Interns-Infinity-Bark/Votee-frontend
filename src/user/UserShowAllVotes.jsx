@@ -2,6 +2,8 @@ import * as React from "react";
 import {Table, Divider,Row,Col} from "antd";
 import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
+import { get } from '../utils/request';
+import { api } from '../configs';
 
 
 const columns = [{
@@ -41,23 +43,13 @@ export class UserShowAllVotes extends React.Component {
         };
     }
 
-    componentDidMount() {
-        const url="http://123.206.15.249:3000/votes";
-        fetch(url,{
-            credentials: 'include',
-            method:'GET',
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            this.setState({
-                data,
-            });
-        })
+    async componentDidMount() {
+        const data = await get(`${api.base}/votes`);
+        this.setState({
+            data: data.data,
+        });
     }
+
     render() {
         return (
             <div className={"padding-top"}>
