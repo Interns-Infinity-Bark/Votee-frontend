@@ -14,7 +14,8 @@ class UserModifyVoteForm extends React.Component{
                 "你纳爷怎么可能能吃鸡呢？",
                 "你纳爷打死也不可能吃鸡的",
                 "你纳爷吃不了鸡，但是我可以",
-                "你纳爷如果变帅了就能吃鸡了hhhhh"
+                "你纳爷如果变帅了就能吃鸡了hhhhh",
+                "asdf"
             ],
             private:true,
             password:"123",
