@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {Button, Form, Icon, Input, Switch,DatePicker} from "antd";
 import {IconProps} from "antd/lib/icon";
+import {post} from "../utils/request";
+import {api} from "../configs";
 const FormItem = Form.Item;
 
 class UserPublishVoteForm extends React.Component{
@@ -8,8 +10,8 @@ class UserPublishVoteForm extends React.Component{
         super(props);
         this.state={
             title:"",
-            content:[],
-            private:true,
+            content:{options:[]},
+            isPrivate:true,
             password:"",
             anonymous:false,
             endAt:new Date()
@@ -47,7 +49,7 @@ class UserPublishVoteForm extends React.Component{
     };
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, fieldsValue) => {
+        this.props.form.validateFields(async (err, fieldsValue) => {
             if (err) {
                 return;
             }
@@ -57,37 +59,15 @@ class UserPublishVoteForm extends React.Component{
             };
 
             console.log('Received values of form: ', values);
-            //请求的url
-            const url="http://123.206.15.249:3000/vote";
-            //请求的参数
-            /*
-            const param={
-                email:values.userName,
-                password:values.password
-            };
-            */
-            //调用fetch
-            fetch(url,{
-                credentials: 'include',
-                //请求方式
-                method:'GET',
-                //将请求的参数转成json
-                body:JSON.stringify(values) ,
-                //请求头
-                headers: {
-                    'content-type': 'application/json'
-                }
-                // 请求的返回值
-            }).then(function (response) {
-                return response.json();
-            }).then(data => {
-                if(data.status === "ok") {
-                    alert('发布成功');
-                } else {
-                    alert('发布失败');
-                }
-            })
 
+            const data = await post(`${api.base}/vote`, values);
+            if (data.status === 'ok') {
+                alert('发布成功');
+                //this.props.history.push('/user/voteManage');
+            }
+            else {
+                alert('发布失败');
+            }
         });
     };
     render(){
@@ -124,7 +104,7 @@ class UserPublishVoteForm extends React.Component{
                     required={false}
                     key={k}
                 >
-                    {getFieldDecorator(`texts[${k}]`, {
+                    {getFieldDecorator(`content.options[${k}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
                         rules: [{
                             required: true,
@@ -172,11 +152,11 @@ class UserPublishVoteForm extends React.Component{
                     {...formItemLayout}
                     label="是否私有："
                 >
-                    {getFieldDecorator('private', {valuePropName:'checked',initialValue:true})(
+                    {getFieldDecorator('isPrivate', {valuePropName:'checked',initialValue:true})(
                         <Switch
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
-                            onChange={()=>{this.setState({private:!this.state.private})}}
+                            onChange={()=>{this.setState({isPrivate:!this.state.isPrivate})}}
                              />
                     )}
                 </FormItem>
@@ -188,7 +168,7 @@ class UserPublishVoteForm extends React.Component{
                         initialValue:""
                     })(<Input
                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        disabled={!this.state.private}
+                        disabled={!this.state.isPrivate}
                         type="password" placeholder="请输入密码" />
                     )}
                 </FormItem>

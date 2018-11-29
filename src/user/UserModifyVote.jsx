@@ -10,48 +10,19 @@ class UserModifyVoteForm extends React.Component{
         super(props);
         this.state={
             title:"你纳爷能不能吃鸡",
-            content: {
-                optionIds: [0, 1, 2, 3],
-                texts: [
-                    "你纳爷怎么可能能吃鸡呢？",
-                    "你纳爷打死也不可能吃鸡的",
-                    "你纳爷吃不了鸡，但是我可以",
-                    "你纳爷如果变帅了就能吃鸡了hhhhh"
-                ]
-            },
+            content: [
+                "你纳爷怎么可能能吃鸡呢？",
+                "你纳爷打死也不可能吃鸡的",
+                "你纳爷吃不了鸡，但是我可以",
+                "你纳爷如果变帅了就能吃鸡了hhhhh"
+            ],
             private:true,
             password:"123",
             anonymous:false,
             endAt:new Date()
         }
     }
-    remove = (k) => {
-        const { form } = this.props;
-        // can use data-binding to get
-        const keys = form.getFieldValue('optionIds');
-        // We need at least one passenger
-        if (keys.length === 1) {
-            return;
-        }
 
-        // can use data-binding to set
-        form.setFieldsValue({
-            optionIds: keys.filter((key) => {
-                return key !== k;
-            }),
-        });
-    };
-    add = () => {
-        const { form } = this.props;
-        // can use data-binding to get
-        const keys = form.getFieldValue('optionIds');
-        const nextKeys = keys.concat(keys.length);
-        // can use data-binding to set
-        // important! notify form to detect changes
-        form.setFieldsValue({
-            optionIds: nextKeys,
-        });
-    };
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, fieldsValue) => {
@@ -91,32 +62,25 @@ class UserModifyVoteForm extends React.Component{
         };
         getFieldDecorator('optionIds', { initialValue: this.state.content.optionIds });
         const keys = getFieldValue('optionIds');
-        const formItems = keys.map((k, index) => {
+        const formItems = this.state.content.map((text, index) => {
             return (
                 <FormItem
                     {...formItemLayout}
                     label={'选项'.concat((index+1).toString())}
                     required={false}
-                    key={k}
+                    key={index}
                 >
-                    {getFieldDecorator(`texts[${k}]`, {
+                    {getFieldDecorator(`content[${index}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
                         rules: [{
                             required: true,
                             whitespace: true,
                             message: "请输入这个选项名或者删除这个选项！",
                         }],
-                        initialValue:this.state.content.texts[k]
+                        initialValue:text
                     })(
-                        <Input placeholder="请输入选项内容" style={{ width: '95%', marginRight: 8 }} />
+                        <Input placeholder="请输入选项内容" style={{ width: '95%', marginRight: 8 }} disabled={true}/>
                     )}
-                    {keys.length == k+1 && k? (
-                        <Icon
-                            className="dynamic-delete-button"
-                            type="minus-circle-o"
-                            onClick={() => this.remove(k)}
-                        />
-                    ) : null}
                 </FormItem>
             );
         });
@@ -125,6 +89,8 @@ class UserModifyVoteForm extends React.Component{
             initialValue:moment(this.state.endAt,"YYYY-MM-DD HH:mm:ss")
         };
         return (
+
+
             <Form onSubmit={this.handleSubmit}>
                 <FormItem
                     {...formItemLayout}
@@ -141,11 +107,6 @@ class UserModifyVoteForm extends React.Component{
                     )}
                 </FormItem>
                 {formItems}
-                <FormItem {...tailFormItemLayout}>
-                    <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-                        <Icon type="plus" /> 添加选项
-                    </Button>
-                </FormItem>
                 <FormItem
                     {...formItemLayout}
                     label="是否私有："
