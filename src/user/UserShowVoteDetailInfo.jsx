@@ -37,12 +37,12 @@ const data=[{
 }
 ];
 
-export class UserShowVoteDetailInfo extends React.Component<RouteComponentProps,{voteId:number}>{
-    constructor(props:RouteComponentProps){
+export class UserShowVoteDetailInfo extends React.Component{
+    constructor(props){
         super(props);
         this.state={voteId:this.props.location.state.voteId}
     }
-    public render() {
+    render() {
         return (
             <div>
                 <h2>{voteInfo.title}</h2>

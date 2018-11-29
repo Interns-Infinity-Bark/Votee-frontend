@@ -3,7 +3,7 @@ import {NavLink} from "react-router-dom";
 import {Button, Col, Divider, Popconfirm, Row, Table} from "antd";
 import Search from "antd/lib/input/Search";
 
-function onDelete(id:number){
+function onDelete(id){
         alert(id);
 }
 const columns = [{
@@ -13,7 +13,7 @@ const columns = [{
 },               {
     title: '操作',
     key: 'action',
-    render: (record:any) => (
+    render: (record) => (
         <span>
         <NavLink to={{
             pathname:'/user/modifyVote',
@@ -42,7 +42,7 @@ const data = [{
 
 export class UserVoteManage extends React.Component{
 
-    public render(){
+    render(){
         return(
             <div className={"padding-top"}>
                 <Row >

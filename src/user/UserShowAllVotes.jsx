@@ -1,20 +1,27 @@
 import * as React from "react";
-import {UserVoting} from "./UserVoting";
-import {UserShowVoteDetailInfo} from "./UserShowVoteDetailInfo";
 import {Table, Divider,Row,Col} from "antd";
 import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
+import { get } from '../utils/request';
+import { api } from '../configs';
 
 
 const columns = [{
-    title: '我投过的投票',
+    title: '所有投票',
     dataIndex: 'title',
     key: 'title',
 },               {
     title: '操作',
     key: 'action',
-    render: (record:any) => (
-        <span>
+    render: (record) => (
+     <span>
+        <NavLink to={{
+          pathname:'/user/voting',
+          state:{
+              voteId:record.id
+          }
+      }}>投票</NavLink>
+        <Divider type="vertical" />
         <NavLink to={{
             pathname:'/user/showDetailInfo',
             state:{
@@ -25,19 +32,24 @@ const columns = [{
     ),
 }];
 
-const data = [{
-    id:1,
-    title:'blue 帅不帅',
-},            {
-    id:2,
-    title:'你纳爷帅不帅',
-},            {
-    id:3,
-    title:'今天老子能不能吃鸡'
-}];
 
-export class UserShowMyVotes extends React.Component{
-    public render() {
+
+export class UserShowAllVotes extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        };
+    }
+
+    async componentDidMount() {
+        const data = await get(`${api.base}/votes`);
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
+        });
+    }
+
+    render() {
         return (
             <div className={"padding-top"}>
                 <Row >
@@ -48,7 +60,7 @@ export class UserShowMyVotes extends React.Component{
                     /></Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={data}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )

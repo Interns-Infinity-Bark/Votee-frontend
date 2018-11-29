@@ -1,27 +1,34 @@
 import * as React from "react";
 
 import { Form, Icon, Input, Button} from 'antd';
-import {FormComponentProps} from "antd/lib/form";
 import FormItem from "antd/lib/form/FormItem";
-import {NavLink, RouteComponentProps} from "react-router-dom";
-interface IAdminLoginFormProps extends FormComponentProps,RouteComponentProps{
-}
+import {NavLink} from "react-router-dom";
 
 import "../main/Index.css"
+import { post } from '../utils/request';
+import { api } from '../configs';
 
-class AdminLoginForm extends React.Component<IAdminLoginFormProps>{
-    public handleSubmit = (e:any) => {
+class AdminLoginForm extends React.Component{
+    handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                // 表单提交的数据是values
-                console.log('Received values of form: ', values);
-                this.props.history.push('/admin',{values})
-
+                const data = await post(`${api.admin}/login`, {
+                    username: values.userName,
+                    password: values.password,
+                });
+                if(data.status === "ok") {
+                    alert('登录成功');
+                    this.props.history.push('/admin',{values});
+                    window.__admin = data.data.user;
+                } else {
+                    alert('登录失败');
+                }
             }
         });
     }
-    public render() {
+
+    render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="container">

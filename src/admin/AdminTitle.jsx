@@ -1,24 +1,31 @@
-/// <reference path="./adminInterfaces.d.ts"/>
 import * as React from "react";
 
-// 首先我们需要导入一些组件...
-import {NavLink, Prompt} from 'react-router-dom'
+import { NavLink, Prompt, withRouter } from 'react-router-dom'
 import {Menu, Layout, Col, Row} from 'antd'
+import { get } from '../utils/request';
+import { api } from '../configs';
 const {Header} = Layout;
 const flag = false;
 
-export class AdminTitle extends React.Component<IAdminTitleProps>{
-    public render() {
+class AdminTitle extends React.Component{
+    logout = () => {
+        get(`${api.admin}/logout`);
+        this.props.history.push('/index');
+        window.__admin = null;
+    };
+
+    render() {
+        const admin = window.__admin || {};
         return (
             <Header>
                 <Row>
                     <Col span={8}>
                 <div className="logo" />
-                <label className="welcome">欢迎您，{this.props.nickName}</label>
+                <label className="welcome">欢迎您，{admin.nickname}</label>
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={[location.pathname]}
+                    defaultSelectedKeys={[window.location.pathname]}
                     style={{ lineHeight: '64px' }}
                 >
                     <Menu.Item key="/admin"><NavLink to="/admin">查看用户列表</NavLink></Menu.Item>
@@ -30,10 +37,12 @@ export class AdminTitle extends React.Component<IAdminTitleProps>{
                             const isApp = location.pathname.indexOf("/admin");
                             return isApp ? `你确定要退出吗？` : true;
                         }} />
-                        <NavLink to={"/index"}>登出</NavLink>
+                        <a onClick={this.logout}>登出</a>
                     </Col>
                 </Row>
             </Header>
         )
     }
 }
+
+export default withRouter(AdminTitle);

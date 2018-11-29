@@ -23,23 +23,23 @@ const voteInfo={
     updateAt:new Date()
 };
 
-export class UserVoting extends React.Component<RouteComponentProps,{voteId:number,value:number}>{
-    constructor(props:RouteComponentProps){
+export class UserVoting extends React.Component{
+    constructor(props){
         super(props);
         this.state={voteId:this.props.location.state.voteId,value:0}
     }
-    public onChange = (e:any) => {
+    onChange = (e) => {
         console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
-    public onSubmit = () =>{
+    onSubmit = () =>{
         alert("提交成功！");
         console.log(this.state.value);
         this.props.history.push('/user')
     };
-    public render() {
+    render() {
         const radioStyle = {
             display: 'block',
             height: '3em',
