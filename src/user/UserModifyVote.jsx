@@ -1,32 +1,36 @@
 import * as React from 'react'
 import {Button, Form, Icon, Input, Switch,DatePicker} from "antd";
-import {FormComponentProps} from "antd/lib/form";
-import {IconProps} from "antd/lib/icon";
 import moment from "moment"
+import {get, post, put} from "../utils/request";
+import {api} from "../configs";
 const FormItem = Form.Item;
 
 class UserModifyVoteForm extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            title:"你纳爷能不能吃鸡",
-            content: [
-                "你纳爷怎么可能能吃鸡呢？",
-                "你纳爷打死也不可能吃鸡的",
-                "你纳爷吃不了鸡，但是我可以",
-                "你纳爷如果变帅了就能吃鸡了hhhhh",
-                "asdf"
-            ],
-            private:true,
-            password:"123",
-            anonymous:false,
-            endAt:new Date()
+            password:"",
+            private:"",
+            voteinfo: {
+                content: {
+                    options: [],
+                }
+            }
         }
+    }
+
+    async componentDidMount() {
+        const voteId = this.props.location.state.voteId;
+        const data = await get(`${api.base}/vote/${voteId}`);
+        data.status === 'ok' && this.setState({
+            voteinfo: data.data.vote,
+        });
+        console.log(this.state.voteinfo);
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, fieldsValue) => {
+        this.props.form.validateFields(async (err, fieldsValue) => {
             if (err) {
                 return;
             }
@@ -34,11 +38,23 @@ class UserModifyVoteForm extends React.Component{
                 ...fieldsValue,
                 'endAt': fieldsValue['endAt'].format('YYYY-MM-DD HH:mm:ss'),
             };
+
             console.log('Received values of form: ', values);
+
+            const voteId = this.props.location.state.voteId;
+            const data = await put(`${api.base}/vote/${voteId}`, values);
+            if (data.status === 'ok') {
+                alert(data.message);
+                this.props.history.push('/user/voteManage');
+            }
+            else {
+                alert(data.message);
+            }
+
         });
     };
     render(){
-        const { getFieldDecorator,getFieldValue } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -61,9 +77,8 @@ class UserModifyVoteForm extends React.Component{
                 },
             },
         };
-        getFieldDecorator('optionIds', { initialValue: this.state.content.optionIds });
-        const keys = getFieldValue('optionIds');
-        const formItems = this.state.content.map((text, index) => {
+
+        const formItems = this.state.voteinfo.content.options.map((text, index) => {
             return (
                 <FormItem
                     {...formItemLayout}
@@ -71,7 +86,7 @@ class UserModifyVoteForm extends React.Component{
                     required={false}
                     key={index}
                 >
-                    {getFieldDecorator(`content[${index}]`, {
+                    {getFieldDecorator(`content.options[${index}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
                         rules: [{
                             required: true,
@@ -87,7 +102,7 @@ class UserModifyVoteForm extends React.Component{
         });
         const config = {
             rules: [{ type: 'object', required: true, message: '请选择时间！' }],
-            initialValue:moment(this.state.endAt,"YYYY-MM-DD HH:mm:ss")
+            initialValue:moment(this.state.voteinfo.endAt,"YYYY-MM-DD HH:mm:ss")
         };
         return (
 
@@ -102,7 +117,7 @@ class UserModifyVoteForm extends React.Component{
                             required: true, message: '请输入投票标题!',
                             whitespace: true
                         }],
-                        initialValue:this.state.title
+                        initialValue:this.state.voteinfo.title
                     })(
                         <Input placeholder={"请输入标题"} />
                     )}
@@ -112,11 +127,11 @@ class UserModifyVoteForm extends React.Component{
                     {...formItemLayout}
                     label="是否私有："
                 >
-                    {getFieldDecorator('private', {valuePropName:'checked',initialValue:this.state.private})(
+                    {getFieldDecorator('isPrivate', {valuePropName:'checked',initialValue:this.state.voteinfo.private})(
                         <Switch
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
-                            onChange={()=>{this.setState({private:!this.state.private})}}
+                            onChange={()=>{this.setState({private:!this.state.voteinfo.private})}}
                         />
                     )}
                 </FormItem>
@@ -136,7 +151,7 @@ class UserModifyVoteForm extends React.Component{
                     {...formItemLayout}
                     label="是否匿名："
                 >
-                    {getFieldDecorator('anonymous', {valuePropName:'checked',initialValue:this.state.anonymous})(
+                    {getFieldDecorator('anonymous', {valuePropName:'checked',initialValue:this.state.voteinfo.anonymous})(
                         <Switch
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
@@ -152,7 +167,7 @@ class UserModifyVoteForm extends React.Component{
                     )}
                 </FormItem>
                 <FormItem {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">发布投票</Button>
+                    <Button type="primary" htmlType="submit">修改投票</Button>
                 </FormItem>
             </Form>
         )

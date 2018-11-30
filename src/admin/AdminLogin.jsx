@@ -22,7 +22,7 @@ class AdminLoginForm extends React.Component{
                     this.props.history.push('/admin',{values});
                     window.__admin = data.data.user;
                 } else {
-                    alert('登录失败');
+                    alert(data.message);
                 }
             }
         });

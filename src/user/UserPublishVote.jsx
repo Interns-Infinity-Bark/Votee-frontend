@@ -22,14 +22,11 @@ class UserPublishVoteForm extends React.Component{
     }
     remove = (k) => {
         const { form } = this.props;
-        // can use data-binding to get
         const keys = form.getFieldValue('optionIds');
-        // We need at least one passenger
         if (keys.length === 1) {
             return;
         }
 
-        // can use data-binding to set
         form.setFieldsValue({
             optionIds: keys.filter((key) => {
                 return key !== k;
@@ -38,11 +35,8 @@ class UserPublishVoteForm extends React.Component{
     };
     add = () => {
         const { form } = this.props;
-        // can use data-binding to get
         const keys = form.getFieldValue('optionIds');
         const nextKeys = keys.concat(keys.length);
-        // can use data-binding to set
-        // important! notify form to detect changes
         form.setFieldsValue({
             optionIds: nextKeys,
         });
@@ -58,15 +52,13 @@ class UserPublishVoteForm extends React.Component{
                 'endAt': fieldsValue['endAt'].format('YYYY-MM-DD HH:mm:ss'),
             };
 
-            console.log('Received values of form: ', values);
-
             const data = await post(`${api.base}/vote`, values);
             if (data.status === 'ok') {
                 alert('发布成功');
-                //this.props.history.push('/user/voteManage');
+                this.props.history.push('/user/voteManage');
             }
             else {
-                alert('发布失败');
+                alert(data.message);
             }
         });
     };

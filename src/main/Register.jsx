@@ -30,7 +30,7 @@ class RegisterForm extends React.Component{
                     this.props.history.push('/user');
                     window.__user = data.data.user;
                 } else {
-                    alert('注册失败');
+                    alert(data.message);
                 }
             }
         });

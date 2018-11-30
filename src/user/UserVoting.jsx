@@ -1,43 +1,35 @@
 import * as React from "react";
-import {RouteComponentProps} from "react-router";
 import {Col, Row, Radio, Switch, Icon, Button} from "antd";
+import {post} from "../utils/request";
+import {api} from "../configs";
 
 const RadioGroup = Radio.Group;
-
-const voteInfo={
-    id:1,
-    user:"UMR",
-    title:"你纳爷能不能吃鸡？",
-    content: {
-        optionIds: [0, 1, 2, 3],
-        texts: [
-            "你纳爷怎么可能能吃鸡呢？",
-            "你纳爷打死也不可能吃鸡的",
-            "你纳爷吃不了鸡，但是我可以",
-            "你纳爷如果变帅了就能吃鸡了hhhhh"
-        ]
-    },
-    anonymous:0,
-    createdAt:new Date(),
-    endAt:new Date(),
-    updateAt:new Date()
-};
 
 export class UserVoting extends React.Component{
     constructor(props){
         super(props);
-        this.state={voteId:this.props.location.state.voteId,value:0}
+        this.state={
+            voteId:this.props.location.state.voteId,
+            value:0,
+            voteInfo:this.props.location.state.data
+        }
     }
+
     onChange = (e) => {
         console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
-    onSubmit = () =>{
-        alert("提交成功！");
-        console.log(this.state.value);
-        this.props.history.push('/user')
+    onSubmit = async () =>{
+        const data = await post(`${api.base}/userVote`,{
+            voteId: this.state.voteId,
+            option: this.state.value,
+        });
+        alert(data.message);
+        if(data.status === 'ok') {
+            this.props.history.push('/user');
+        }
     };
     render() {
         const radioStyle = {
@@ -47,27 +39,20 @@ export class UserVoting extends React.Component{
         };
         return (
             <div>
-                {/*<p>id为：{this.state.voteId}的投票信息</p>*/}
-                <h2>{voteInfo.title}</h2>
+                <h2>{this.state.voteInfo.title}</h2>
                 <Row>
-                    <Col offset={4} span={4}>创建时间：{voteInfo.createdAt.toLocaleTimeString()}</Col>
-                    <Col span={4}>创建人：{voteInfo.anonymous?"已匿名":voteInfo.user}</Col>
-                    <Col span={4}>结束时间：{voteInfo.endAt.toLocaleTimeString()}</Col>
-                    <Col span={4}>最后更新时间：{voteInfo.updateAt.toLocaleTimeString()}</Col>
+                    <Col offset={2} span={5}>创建时间：{this.state.voteInfo.createdAt.toString().substring(0,19).replace('T',' ')}</Col>
+                    <Col span={5}>创建人：{this.state.voteInfo.anonymous?"已匿名":this.state.voteInfo.userNickname}</Col>
+                    <Col span={5}>结束时间：{this.state.voteInfo.endAt.toString().substring(0,19).replace('T',' ')}</Col>
+                    <Col span={5}>最后更新时间：{this.state.voteInfo.updatedAt.toString().substring(0,19).replace('T',' ')}</Col>
                 </Row>
                 <Row className={"showContent"}>
                     <Col offset={8} span={8}>
                         <RadioGroup onChange={this.onChange} value={this.state.value}>
-                            {voteInfo.content.optionIds.map(item => (
-                                <Radio style={radioStyle} value={item} key={item}>{voteInfo.content.texts[item]}</Radio>
+                            {this.state.voteInfo.content.options.map((item,index) => (
+                                <Radio style={radioStyle} value={index} key={index}>{item}</Radio>
                             ))}
                         </RadioGroup>
-                    </Col>
-                </Row>
-                <Row className={"showFooter"}>
-                    <Col offset={8} span={3}>
-                        是否匿名：<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
-                                defaultChecked />
                     </Col>
                 </Row>
                 <Row className={"padding-top"}>
