@@ -1,12 +1,9 @@
 import * as React from "react";
-import {UserVoting} from "./UserVoting";
-import {UserShowVoteDetailInfo} from "./UserShowVoteDetailInfo";
 import {Table, Divider,Row,Col} from "antd";
 import {NavLink} from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import { get } from '../utils/request';
 import { api } from '../configs';
-
 
 const columns = [{
     title: '我投过的投票',
@@ -43,13 +40,20 @@ export class UserShowMyVotes extends React.Component{
         });
     }
 
+    async searchFunction(value) {
+        const data = await get(`${api.base}/myVotes?title=${value}`);
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
+        });
+    }
+
     render() {
         return (
             <div className={"padding-top"}>
                 <Row >
                     <Col offset={6} span={12}><Search
                         placeholder="请输入您要搜索的投票名称"
-                        onSearch={value => console.log(value)}
+                        onSearch={value => this.searchFunction(value)}
                         enterButton
                     /></Col>
                 </Row>

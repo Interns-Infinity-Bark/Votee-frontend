@@ -60,9 +60,7 @@ export class UserShowAllVotes extends React.Component {
                 return;
             }
 
-            console.log(values);
             const votedata = await post(`${api.base}/vote/${this.state.id}`, values);
-            console.log(votedata);
 
             if(votedata.status === 'ok') {
                 this.props.history.push({
@@ -107,6 +105,13 @@ export class UserShowAllVotes extends React.Component {
         });
     }
 
+    async searchFunction(value) {
+        const data = await get(`${api.base}/votes?title=${value}`);
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
+        });
+    }
+
     render() {
 
         const columns = [{
@@ -142,7 +147,7 @@ export class UserShowAllVotes extends React.Component {
                 <Row >
                     <Col offset={6} span={12}><Search
                         placeholder="请输入您要搜索的投票名称"
-                        onSearch={value => console.log(value)}
+                        onSearch={value => this.searchFunction(value)}
                         enterButton
                     /></Col>
                 </Row>
