@@ -37,6 +37,14 @@ export class UserVoteManage extends React.Component{
         });
     }
 
+    async searchFunction(value) {
+        const user = window.__user || {};
+        const data = await get(`${api.base}/user/${user.id}/votes?title=${value}`);
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
+        });
+    }
+
     render(){
         const columns = [{
             title: '我发布的投票',
@@ -65,7 +73,7 @@ export class UserVoteManage extends React.Component{
                 <Row >
                     <Col offset={6} span={10}><Search
                         placeholder="请输入您要搜索的投票名称"
-                        onSearch={value => console.log(value)}
+                        onSearch={value => this.searchFunction(value)}
                         enterButton
                     /></Col>
                     <Col span={3}>
