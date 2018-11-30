@@ -2,19 +2,51 @@ import * as React from "react";
 import {NavLink} from "react-router-dom";
 import {Button, Col, Divider, Popconfirm, Row, Table} from "antd";
 import Search from "antd/lib/input/Search";
+import {get} from "../utils/request";
+import {del} from "../utils/request";
+import {api} from "../configs";
 
-function onDelete(id){
-        alert(id);
-}
-const columns = [{
-    title: '我发布的投票',
-    dataIndex: 'title',
-    key: 'title',
-},               {
-    title: '操作',
-    key: 'action',
-    render: (record) => (
-        <span>
+
+export class UserVoteManage extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        }
+    }
+
+    async onDelete(id){
+        const user = window.__user || {};
+        const data = await del(`${api.base}/vote/${id}`);
+        if(data.status === 'ok') {
+            console.log(data.message);
+            const votedata = await get(`${api.base}/user/${user.id}/votes`);
+            votedata.status === 'ok' && this.setState({
+                data: votedata.data.votes,
+            });
+        } else {
+            console.log(data.message);
+        }
+    }
+
+    async componentDidMount() {
+        const user = window.__user || {};
+        const data = await get(`${api.base}/user/${user.id}/votes`);
+        data.status === 'ok' && this.setState({
+            data: data.data.votes,
+        });
+    }
+
+    render(){
+        const columns = [{
+            title: '我发布的投票',
+            dataIndex: 'title',
+            key: 'title',
+        },               {
+            title: '操作',
+            key: 'action',
+            render: (record) => (
+                <span>
         <NavLink to={{
             pathname:'/user/modifyVote',
             state:{
@@ -22,27 +54,12 @@ const columns = [{
             }
         }}>修改</NavLink>
         <Divider type="vertical" />
-        <Popconfirm title="您确定要删除吗?" onConfirm={() => onDelete(record.id)}>
+        <Popconfirm title="您确定要删除吗?" onConfirm={() => this.onDelete(record.id)}>
             <a>删除</a>
         </Popconfirm>
     </span>
-    ),
-}];
-
-const data = [{
-    id:1,
-    title:'blue 帅不帅',
-},            {
-    id:2,
-    title:'你纳爷帅不帅',
-},            {
-    id:3,
-    title:'今天老子能不能吃鸡'
-}];
-
-export class UserVoteManage extends React.Component{
-
-    render(){
+            ),
+        }];
         return(
             <div className={"padding-top"}>
                 <Row >
@@ -56,7 +73,7 @@ export class UserVoteManage extends React.Component{
                     </Col>
                 </Row>
                 <Row style={{paddingTop:"2em"}}>
-                    <Col offset={6} span={12}><Table  dataSource={data}  columns={columns} rowKey={"id"}/></Col>
+                    <Col offset={6} span={12}><Table  dataSource={this.state.data}  columns={columns} rowKey={"id"}/></Col>
                 </Row>
             </div>
         )

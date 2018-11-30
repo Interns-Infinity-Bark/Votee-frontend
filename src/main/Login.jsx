@@ -21,7 +21,7 @@ class LoginForm extends React.Component{
                     window.__user = data.data.user;
                 }
                 else {
-                    alert('登录失败');
+                    alert(data.message);
                 }
             }
         });

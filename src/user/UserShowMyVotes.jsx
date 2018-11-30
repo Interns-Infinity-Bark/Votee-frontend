@@ -27,17 +27,6 @@ const columns = [{
     ),
 }];
 
-const data = [{
-    id:1,
-    title:'blue 帅不帅',
-},            {
-    id:2,
-    title:'你纳爷帅不帅',
-},            {
-    id:3,
-    title:'今天老子能不能吃鸡'
-}];
-
 export class UserShowMyVotes extends React.Component{
     constructor(props) {
         super(props);
@@ -48,7 +37,7 @@ export class UserShowMyVotes extends React.Component{
 
     async componentDidMount() {
         const user = window.__user || {};
-        const data = await get(`${api.base}/user/${user.id}/votes`);
+        const data = await get(`${api.base}/myVotes`);
         data.status === 'ok' && this.setState({
             data: data.data.votes,
         });
