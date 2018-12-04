@@ -21,14 +21,12 @@ class AdminLoginForm extends React.Component{
                     alert('登录成功');
                     this.props.history.push('/admin',{values});
                     window.__admin = data.data.user;
-                } else {
-                    if(data.message === "已登录"){
+                } else if(data.message === "已登录"){
                         alert('您已登录');
                         this.props.history.push('/admin');
                     }
                     else alert(data.message);
                 }
-            }
         });
     };
 

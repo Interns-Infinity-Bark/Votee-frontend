@@ -21,13 +21,11 @@ class LoginForm extends React.Component{
                     this.props.history.push('/user');
                     window.__user = data.data.user;
                 }
-                else {
-                    if(data.message === "已登录"){
+                else if(data.message === "已登录"){
                         alert('您已登录');
                         this.props.history.push('/user');
                     }
                     else alert(data.message);
-                }
             }
         });
     };
