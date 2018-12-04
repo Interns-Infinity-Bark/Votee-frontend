@@ -59,7 +59,7 @@ export class UserShowAllVotes extends React.Component {
             if (err) {
                 return;
             }
-            console.log(values);
+
             const votedata = await post(`${api.base}/vote/${this.state.id}`, values);
 
             if(votedata.status === 'ok') {
@@ -82,7 +82,7 @@ export class UserShowAllVotes extends React.Component {
 
     voting = async (voteId,isPrivate,user)=> {
         this.setState({id:voteId});
-        if(isPrivate && user !== window.__user.id){
+        if(isPrivate && user !== window.__user.id && window.__admin !== undefined){
             this.showModal();
         }
         else {
