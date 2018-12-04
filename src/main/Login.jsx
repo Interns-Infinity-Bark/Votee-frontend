@@ -16,13 +16,17 @@ class LoginForm extends React.Component{
                     email: values.userName,
                     password: values.password,
                 });
-                if (data.status === 'ok'|| data.message === "已登录") {
+                if (data.status === 'ok') {
                     alert('登录成功');
                     this.props.history.push('/user');
                     window.__user = data.data.user;
                 }
                 else {
-                    alert(data.message);
+                    if(data.message === "已登录"){
+                        alert('您已登录');
+                        this.props.history.push('/user');
+                    }
+                    else alert(data.message);
                 }
             }
         });
