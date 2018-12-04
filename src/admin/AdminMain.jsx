@@ -10,6 +10,11 @@ import {AdminShowAllVotes} from "./AdminShowAllVotes";
 const { Content, Footer } = Layout;
 
 export class AdminMain extends React.Component{
+    componentDidMount(){
+        if(window.__user !== undefined){
+            this.props.history.push('/user');
+        }
+    }
     render() {
         const admin = window.__admin;
         return (
