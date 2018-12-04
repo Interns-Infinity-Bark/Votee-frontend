@@ -10,11 +10,7 @@ const columns = [{
     dataIndex: 'amount',
 }];
 
-const Result = [{
-    text:'',
-    amount:'',
-    id:0,
-}]
+
 
 export class UserShowVoteDetailInfo extends React.Component{
     constructor(props){
@@ -38,6 +34,7 @@ export class UserShowVoteDetailInfo extends React.Component{
         data.status === 'ok' && this.setState({
             data: data.data,
         });
+        const Result = [];
         for (let i = 0; i < this.state.data.result.length; i++) {
             Result.push({
                 text:this.state.data.vote.content.options[i],
