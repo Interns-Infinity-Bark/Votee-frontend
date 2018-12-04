@@ -57,9 +57,11 @@ export class UserShowVoteDetailInfo extends React.Component{
                     <Col span={4}>结束时间：{this.state.data.vote.endAt.toString().substring(0,19).replace('T',' ')}</Col>
                     <Col span={4}>最后更新时间：{this.state.data.vote.updatedAt.toString().substring(0,19).replace('T',' ')}</Col>
                 </Row>
-                <Col style={{paddingTop:"2em"}} span={12} offset={6}>
-                    <Table   dataSource={this.state.isResult}  columns={columns} rowKey={"id"}/>
-                </Col>
+                <Row>
+                    <Col style={{paddingTop:"2em"}} span={12} offset={6}>
+                        <Table   dataSource={this.state.isResult}  columns={columns} rowKey={"id"}/>
+                    </Col>
+                </Row>
             </div>
         )
     }

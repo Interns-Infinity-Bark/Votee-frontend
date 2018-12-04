@@ -59,7 +59,7 @@ export class UserShowAllVotes extends React.Component {
             if (err) {
                 return;
             }
-
+            console.log(values)
             const votedata = await post(`${api.base}/vote/${this.state.id}`, values);
 
             if(votedata.status === 'ok') {
@@ -80,9 +80,9 @@ export class UserShowAllVotes extends React.Component {
         this.formRef = formRef;
     };
 
-    voting = async (voteId,isPrivate)=> {
+    voting = async (voteId,isPrivate,user)=> {
         this.setState({id:voteId});
-        if(isPrivate){
+        if(isPrivate && user !== window.__user.id){
             this.showModal();
         }
         else {
@@ -99,6 +99,11 @@ export class UserShowAllVotes extends React.Component {
     };
 
     async componentDidMount() {
+        if(window.__user == null)
+        {
+            this.state.history.push('/index');
+            return;
+        }
         const data = await get(`${api.base}/votes`);
         data.status === 'ok' && this.setState({
             data: data.data.votes,
@@ -124,7 +129,7 @@ export class UserShowAllVotes extends React.Component {
             render: (record) => (
                 <span>
 
-        <a onClick={this.voting.bind(this,record.id,record.isPrivate)}>投票</a>
+        <a onClick={this.voting.bind(this,record.id,record.isPrivate,record.user)}>投票</a>
         <Divider type="vertical" />
         <NavLink to={{
             pathname:'/user/showDetailInfo',

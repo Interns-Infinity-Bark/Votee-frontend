@@ -61,6 +61,11 @@ export class AdminShowUsers extends React.Component{
     }
 
     async componentDidMount() {
+        if(window.__admin == null)
+        {
+            this.state.history.push('/index');
+            return;
+        }
         const data = await get(`${api.admin}/users`);
         data.status === 'ok' && this.setState({
             data: data.data.users,
