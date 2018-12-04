@@ -99,11 +99,6 @@ export class UserShowAllVotes extends React.Component {
     };
 
     async componentDidMount() {
-        if(window.__user == null)
-        {
-            this.state.history.push('/index');
-            return;
-        }
         const data = await get(`${api.base}/votes`);
         data.status === 'ok' && this.setState({
             data: data.data.votes,

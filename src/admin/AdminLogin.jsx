@@ -9,12 +9,6 @@ import { post } from '../utils/request';
 import { api } from '../configs';
 
 class AdminLoginForm extends React.Component{
-    componentDidMount(){
-        if(window.__admin !== null)
-        {
-            this.state.history.push('/admin');
-        }
-    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields(async (err, values) => {
