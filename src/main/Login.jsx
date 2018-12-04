@@ -16,7 +16,7 @@ class LoginForm extends React.Component{
                     email: values.userName,
                     password: values.password,
                 });
-                if (data.status === 'ok') {
+                if (data.status === 'ok'|| data.message === "已登录") {
                     alert('登录成功');
                     this.props.history.push('/user');
                     window.__user = data.data.user;
