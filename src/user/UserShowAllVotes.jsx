@@ -59,7 +59,7 @@ export class UserShowAllVotes extends React.Component {
             if (err) {
                 return;
             }
-            console.log(values)
+            console.log(values);
             const votedata = await post(`${api.base}/vote/${this.state.id}`, values);
 
             if(votedata.status === 'ok') {
