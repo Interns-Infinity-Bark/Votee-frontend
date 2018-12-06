@@ -82,7 +82,7 @@ export class UserShowAllVotes extends React.Component {
 
     voting = async (voteId,isPrivate,user)=> {
         this.setState({id:voteId});
-        if(isPrivate && user !== window.__user.id && window.__admin !== undefined){
+        if(isPrivate && user !== window.__user.id){
             this.showModal();
         }
         else {
